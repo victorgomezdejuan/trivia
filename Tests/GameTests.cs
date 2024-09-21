@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Trivia;
+using VerifyXunit;
 using Xunit;
 
 namespace Tests;
@@ -8,7 +10,7 @@ namespace Tests;
 public class GameTests
 {
     [Fact]
-    public void GameWithTwoPlayers()
+    public Task GameWithTwoPlayers()
     {
         using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
@@ -18,7 +20,7 @@ public class GameTests
         game.Add("Victor");
         game.Add("Tao");
 
-        var random = new Random();
+        var random = new Random(123);
         bool hasWon;
 
         do
@@ -35,6 +37,6 @@ public class GameTests
             }
         } while (hasWon);
 
-        File.AppendAllText(@"C:\Training\Snapshot Testing\Tests\output.txt", stringWriter.ToString());
+        return Verifier.Verify(stringWriter.ToString());
     }
 }
