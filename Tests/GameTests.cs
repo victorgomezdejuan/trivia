@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Tests.TestDoubles;
 using Trivia;
-using VerifyTests;
 using VerifyXunit;
 using Xunit;
 
@@ -55,6 +55,43 @@ public class GameTests
         }
 
         Assert.Equal(numberOfPlayers, game.HowManyPlayers());
+    }
+
+    [Fact]
+    public void WasCorrectlyAnswered_ShouldDisplayCorrectMessage_WhenPlayerIsNotInPenaltyBox()
+    {
+        // Arrange
+        var spyDisplay = new SpyDisplay();
+        var game = new Game(spyDisplay);
+
+        game.Add("Irrelevant player");
+
+        // Act
+        game.WasCorrectlyAnswered();
+
+        // Assert
+        Assert.Contains("Answer was correct!", spyDisplay.GetMessages());
+    }
+
+    [Fact]
+    public void WasCorrectlyAnswered_ShouldDisplayCorrectMessage_WhenPlayerIsInPenaltyBoxAndIsGettingOutOfIt()
+    {
+        // Arrange
+        var spyDisplay = new SpyDisplay();
+        var game = new Game(spyDisplay);
+
+        game.Add("Irrelevant player");
+
+        game.Roll(1);
+        game.WrongAnswer(); // Player is in penalty box
+
+        game.Roll(1); // Player is getting out of penalty box
+
+        // Act
+        game.WasCorrectlyAnswered();
+
+        // Assert
+        Assert.Contains("Answer was correct!", spyDisplay.GetMessages());
     }
 
     private static string PlayGame(int seed)

@@ -6,6 +6,8 @@ namespace Trivia
 {
     public class Game
     {
+        private readonly IDisplay _display;
+
         private readonly List<string> _players = new List<string>();
 
         private readonly int[] _places = new int[6];
@@ -21,8 +23,12 @@ namespace Trivia
         private int _currentPlayer;
         private bool _isGettingOutOfPenaltyBox;
 
-        public Game()
+        public Game() : this(new ConsoleDisplay()) { }
+
+        public Game(IDisplay display)
         {
+            _display = display;
+
             for (var i = 0; i < 50; i++)
             {
                 _popQuestions.AddLast("Pop Question " + i);
@@ -143,7 +149,7 @@ namespace Trivia
             {
                 if (_isGettingOutOfPenaltyBox)
                 {
-                    Console.WriteLine("Answer was correct!!!!");
+                    _display.Show("Answer was correct!");
                     _purses[_currentPlayer]++;
                     Console.WriteLine(_players[_currentPlayer]
                             + " now has "
@@ -165,7 +171,7 @@ namespace Trivia
             }
             else
             {
-                Console.WriteLine("Answer was corrent!!!!");
+                _display.Show("Answer was correct!");
                 _purses[_currentPlayer]++;
                 Console.WriteLine(_players[_currentPlayer]
                         + " now has "
