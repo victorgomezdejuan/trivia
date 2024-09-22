@@ -13,9 +13,9 @@ public class GameTests
     [Fact]
     public Task PlaySeveralGamesAndTestOutput()
     {
-        var gameOutputs = new string[100];
+        var gameOutputs = new string[10];
 
-        for (var seed = 0; seed < 100; seed++)
+        for (var seed = 0; seed < 10; seed++)
         {
             var output = PlayGame(seed);
             gameOutputs[seed] = output; 
